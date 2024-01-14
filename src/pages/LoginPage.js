@@ -5,10 +5,10 @@ import { FormProvider, FTextField } from "../components/form";
 import useAuth from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import * as Yup from "yup";
 
-const LoginSchema = yup.object().shape({
-  username: yup.string().required("Username is required"),
+const LoginSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
 });
 const defaultValues = {
   username: "",

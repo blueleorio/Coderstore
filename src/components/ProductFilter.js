@@ -1,53 +1,79 @@
-import { Button, Stack, Typography } from "@mui/material";
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { FormProvider, FTextField } from "../components/form";
-import useAuth from "../hooks/useAuth";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { FMultiCheckbox, FRadioGroup } from "./form";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
-const LoginSchema = yup.object().shape({
-  username: yup.string().required("Username is required"),
-});
-const defaultValues = {
-  username: "",
-};
+export const SORT_BY_OPTIONS = [
+  { value: "featured", label: "Featured" },
+  { value: "newest", label: "Newest" },
+  { value: "priceDesc", label: "Price: High-Low" },
+  { value: "priceAsc", label: "Price: Low-High" },
+];
 
-function LoginPage() {
-  let navigate = useNavigate();
-  let location = useLocation();
-  let auth = useAuth();
+export const FILTER_GENDER_OPTIONS = ["Men", "Women", "Kids"];
 
-  const methods = useForm({
-    resolver: yupResolver(LoginSchema),
-    defaultValues,
-  });
-  const { handleSubmit } = methods;
+export const FILTER_CATEGORY_OPTIONS = [
+  "All",
+  "Shose",
+  "Apparel",
+  "Accessories",
+];
 
-  const onSubmit = async (data) => {
-    let from = location.state?.from?.pathname || "/";
-    let username = data.username;
+export const FILTER_PRICE_OPTIONS = [
+  { value: "below", label: "Below $25" },
+  { value: "between", label: "Between $25 - $75" },
+  { value: "above", label: "Above $75" },
+];
 
-    auth.login(username, () => {
-      navigate(from, { replace: true });
-    });
-  };
-
+function ProductFilter({ resetFilter }) {
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3} sx={{ minWidth: "350px" }}>
-        <Typography variant="h4" textAlign="center">
-          Login
+    <Stack spacing={3} sx={{ p: 3, width: 250 }}>
+      <Stack spacing={1}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Gender
         </Typography>
-        <FTextField name="username" label="Username" />
-
-        <Button type="submit" variant="contained">
-          Login
-        </Button>
+        <FMultiCheckbox
+          name="gender"
+          options={FILTER_GENDER_OPTIONS}
+          sx={{ width: 1 }}
+        />
       </Stack>
-    </FormProvider>
+
+      <Stack spacing={1}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Category
+        </Typography>
+        <FRadioGroup
+          name="category"
+          options={FILTER_CATEGORY_OPTIONS}
+          row={false}
+        />
+      </Stack>
+
+      <Stack spacing={1}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Price
+        </Typography>
+        <FRadioGroup
+          name="priceRange"
+          options={FILTER_PRICE_OPTIONS.map((item) => item.value)}
+          getOptionLabel={FILTER_PRICE_OPTIONS.map((item) => item.label)}
+        />
+      </Stack>
+
+      <Box>
+        <Button
+          size="large"
+          type="submit"
+          color="inherit"
+          variant="outlined"
+          onClick={resetFilter}
+          startIcon={<ClearAllIcon />}
+        >
+          Clear All
+        </Button>
+      </Box>
+    </Stack>
   );
 }
 
-export default LoginPage;
+export default ProductFilter;
