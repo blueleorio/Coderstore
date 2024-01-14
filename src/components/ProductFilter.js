@@ -13,7 +13,7 @@ export const FILTER_GENDER_OPTIONS = ["Men", "Women", "Kids"];
 
 export const FILTER_CATEGORY_OPTIONS = [
   "All",
-  "Shose",
+  "Shoes",
   "Apparel",
   "Accessories",
 ];
