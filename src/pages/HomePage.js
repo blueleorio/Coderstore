@@ -24,6 +24,7 @@ function HomePage() {
   };
   const methods = useForm({
     defaultValues,
+    shouldUnregister: false,
   });
   const { watch, reset } = methods;
   const filters = watch();
